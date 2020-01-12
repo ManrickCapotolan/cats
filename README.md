@@ -1,6 +1,7 @@
 ## Setup
 
-Run: `npm install`
+Clone this repo.
+Open terminal then run: `npm install`
 
 ## Running
 

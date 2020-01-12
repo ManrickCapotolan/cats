@@ -36,12 +36,11 @@ export default function CatList(props: RouteComponentProps) {
   }, [props.location.search]);
 
   useEffect(() => {
-    if (selectedBreed) loadCats(page, selectedBreed, []);
-  }, [selectedBreed]); // eslint-disable-line
+    if (selectedBreed) loadCats(1, selectedBreed, []);
+  }, [selectedBreed]);
 
   const loadMore = () => {
     loadCats(page + 1, selectedBreed, cats);
-    setPage(page + 1);
   };
 
   const loadCats = (page: number, breed: string, initial: Cat[]) => {
@@ -50,6 +49,7 @@ export default function CatList(props: RouteComponentProps) {
       const result: Cat[] = await getCats(page, CAT_LIMIT, breed);
       const newCats = result.filter((cat) => initial.map(i => i.id).indexOf(cat.id) < 0); // needed because of how API was written.
       setCats([...initial, ...newCats]);
+      setPage(page + 1);
       if (!newCats.length) setHideButton(true);
       setLoading(false);
     }
@@ -58,7 +58,6 @@ export default function CatList(props: RouteComponentProps) {
   };
   
   const onSelectChange = (e: any) => {
-    setPage(1);
     setCats([]);
     setSelectedBreed(e.target.value);
     setHideButton(false);
