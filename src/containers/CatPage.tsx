@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
 import { getCat } from '../services/catsApi';
 
-export interface Props {}
-
-export default function CatPage(props: any) {
-  const [details, setDetails] = useState({} as any);
-  const [loading, setLoading] = useState(true);
+export default function CatPage(props: RouteComponentProps<{ id: string }>) {
+  const [details, setDetails] = useState({} as CatDetail);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getCat(props.match.params.id, (details: Object) => {
-      setDetails(details);
+    async function fetchDetails() {
+      setLoading(true);
+      const result = await getCat(props.match.params.id);
+      setDetails(result);
       setLoading(false);
-    });
+    }
+
+    fetchDetails();
   }, [props.match.params.id]);
 
-  return (
-    <Container>
-      {
-        loading
-        ? <p>Loading...</p>
-        : <Card>
+  const renderCard = () => {
+    return details && details.breeds && details.breeds.length
+      ? <Card>
           <Card.Header>
             <Link className="btn btn-primary" to={`/?breed=${details.breeds[0].id}`}>Back</Link>
           </Card.Header>
@@ -34,7 +33,10 @@ export default function CatPage(props: any) {
             <p>{details.breeds[0].description}</p>
           </Card.Body>
         </Card>
-      }
-    </Container>
-  );
+      : null;
+  }
+
+  return loading
+    ? <p>Loading...</p>
+    : renderCard();
 }
