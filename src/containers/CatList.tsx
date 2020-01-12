@@ -8,6 +8,8 @@ import { getBreeds, getCats } from '../services/catsApi';
 import { parseQuery } from '../helpers/queryHelper';
 import CatCard from '../components/CatCard/CatCard';
 
+import './CatList.css';
+
 export default function CatList(props: RouteComponentProps) {
   const CAT_LIMIT = 10;
 
@@ -65,7 +67,7 @@ export default function CatList(props: RouteComponentProps) {
 
   const renderFilter = () => {
     return <div>
-      <Row>
+      <Row className="filters">
         <Col md={3} sm={6} xs={12}>
           <Form.Group controlId="breed">
             <Form.Label>Breed</Form.Label>
@@ -86,7 +88,7 @@ export default function CatList(props: RouteComponentProps) {
 
   const renderCats = () => {
     return !loading && !cats.length
-      ? <p>No available cats</p>
+      ? <p>No cats available</p>
       : <div>
           <Row>
             { cats.map((cat) => <Col md={3} sm={6} xs={12} key={cat.id}>{ CatCard(cat) }</Col> ) }
@@ -98,7 +100,7 @@ export default function CatList(props: RouteComponentProps) {
     return <Row>
       <Col md={3} sm={6} xs={12}>
         <Button variant="success" type="button" onClick={loadMore}>
-          {loading ? 'Loading' : 'Load more'}
+          {loading ? 'Loading cats...' : 'Load more'}
         </Button>
       </Col>
     </Row>

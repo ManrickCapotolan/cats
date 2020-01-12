@@ -37,6 +37,6 @@ export default function CatPage(props: RouteComponentProps<{ id: string }>) {
   }
 
   return loading
-    ? <p>Loading...</p>
+    ? <h5>Loading...</h5>
     : renderCard();
 }
